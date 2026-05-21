@@ -32,7 +32,7 @@
                                         <ul role="list" class="-mx-2 space-y-1">
                                             <li>
                                                 <Link href="/"
-                                                    :class="isUrl('dashboard') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
+                                                    :class="isUrl('/dashboard') || isUrl('/') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
                                                     class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="1.5" data-slot="icon" aria-hidden="true"
@@ -80,7 +80,7 @@
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li>
                                     <Link href="/"
-                                        :class="isUrl('dashboard') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
+                                        :class="isUrl('/dashboard') || isUrl('/') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
                                         class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                                         data-slot="icon" aria-hidden="true" class="size-6 shrink-0 text-white">
@@ -93,7 +93,7 @@
                                 </li>
                                 <li>
                                     <Link href="/rooms"
-                                        :class="isUrl('rooms') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
+                                        :class="isUrl('/rooms') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
                                         class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -156,8 +156,8 @@ export default {
 
     methods: {
         isUrl(value) {
-            const URL = this.$page.url.includes(value);
-            return URL;
+            const URL = this.$page.url;
+            return URL == value;
         }
     }
 }
