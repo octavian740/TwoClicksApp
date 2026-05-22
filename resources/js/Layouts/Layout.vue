@@ -1,12 +1,13 @@
 <template class="h-full bg-white">
     <div class="h-full">
-        <el-dialog>
+        <div>
             <dialog id="sidebar" class="backdrop:bg-transparent lg:hidden">
-                <el-dialog-backdrop
-                    class="fixed inset-0 bg-gray-900/80 transition-opacity duration-300 ease-linear data-closed:opacity-0"></el-dialog-backdrop>
+                <div
+                    class="fixed inset-0 bg-gray-900/80 transition-opacity duration-300 ease-linear data-closed:opacity-0">
+                </div>
 
                 <div tabindex="0" class="fixed inset-0 flex focus:outline-none">
-                    <el-dialog-panel
+                    <div
                         class="group/dialog-panel relative mr-16 flex w-full max-w-xs flex-1 transform transition duration-300 ease-in-out data-closed:-translate-x-full">
                         <div
                             class="absolute top-0 left-full flex w-16 justify-center pt-5 duration-300 ease-in-out group-data-closed/dialog-panel:opacity-0">
@@ -22,9 +23,23 @@
                         <!-- Sidebar component, swap this element with another sidebar if you like -->
                         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-2">
                             <div class="flex h-16 shrink-0 items-center">
-                                <!-- <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white"
-                                    alt="Your Company" class="h-8 w-auto" /> -->
-                                <h1 class="bg-white py-2 font-black rounded-br-xl">TwoCLicksApp</h1>
+                                <div class="relative group cursor-pointer">
+                                    <div
+                                        class="absolute -inset-1 rounded-br-2xl bg-gradient-to-r from-blue-600 to-indigo-600 opacity-25 blur transition-all group-hover:opacity-100 group-hover:duration-200">
+                                    </div>
+                                    <div
+                                        class="relative flex items-center gap-2 bg-white px-5 py-3 rounded-br-2xl ring-1 ring-slate-200/20">
+                                        <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="white" class="size-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M17.757 14.743l-1.59 1.59M6.166 4.666l1.591 1.591M3.75 10.5H6m2.243 4.743l1.59 1.59" />
+                                            </svg>
+                                        </div>
+                                        <h1 class="text-2xl font-extrabold tracking-tighter text-slate-950">Two<span
+                                                class="text-indigo-600">Clicks</span>App</h1>
+                                    </div>
+                                </div>
                             </div>
                             <nav class="flex flex-1 flex-col">
                                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -48,9 +63,11 @@
                                                 <Link href="/rooms"
                                                     :class="isUrl('rooms') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
                                                     class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-</svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                                                </svg>
 
                                                 Rooms
                                                 </Link>
@@ -60,19 +77,33 @@
                                 </ul>
                             </nav>
                         </div>
-                    </el-dialog-panel>
+                    </div>
                 </div>
             </dialog>
-        </el-dialog>
+        </div>
 
         <!-- Static sidebar for desktop -->
         <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
             <!-- Sidebar component, swap this element with another sidebar if you like -->
             <div class="relative flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
                 <div class="flex h-16 shrink-0 items-center">
-                    <!-- <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white" alt="Your Company"
-                        class="h-8 w-auto" /> -->
-                    <h1 class="bg-white py-2 font-black rounded-br-xl">TwoCLicksApp</h1>
+                    <div class="relative group cursor-pointer">
+                        <div
+                            class="absolute -inset-1 rounded-br-2xl bg-gradient-to-r from-blue-600 to-indigo-600 opacity-25 blur transition-all group-hover:opacity-100 group-hover:duration-200">
+                        </div>
+                        <div
+                            class="relative flex items-center gap-2 bg-white px-5 py-3 rounded-br-2xl ring-1 ring-slate-200/20">
+                            <div class="flex size-8 items-center justify-center rounded-lg bg-indigo-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="white" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M17.757 14.743l-1.59 1.59M6.166 4.666l1.591 1.591M3.75 10.5H6m2.243 4.743l1.59 1.59" />
+                                </svg>
+                            </div>
+                            <h1 class="text-2xl font-extrabold tracking-tighter text-slate-950">Two<span
+                                    class="text-indigo-600">Clicks</span>App</h1>
+                        </div>
+                    </div>
                 </div>
                 <nav class="flex flex-1 flex-col">
                     <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -80,7 +111,7 @@
                             <ul role="list" class="-mx-2 space-y-1">
                                 <li>
                                     <Link href="/"
-                                        :class="isUrl('/dashboard') || isUrl('/') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
+                                        :class="isUrl('dashboard') || isUrl('') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
                                         class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                                         data-slot="icon" aria-hidden="true" class="size-6 shrink-0 text-white">
@@ -93,7 +124,7 @@
                                 </li>
                                 <li>
                                     <Link href="/rooms"
-                                        :class="isUrl('/rooms') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
+                                        :class="isUrl('rooms') ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700'"
                                         class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -155,10 +186,14 @@ export default {
     },
 
     methods: {
-        isUrl(value) {
-            const URL = this.$page.url;
-            return URL == value;
-        }
+        isUrl(...urls) {
+            let currentUrl = this.$page.url.substr(1);
+            if (urls[0] === "") {
+                return currentUrl === "";
+            }
+
+            return urls.filter((url) => currentUrl.startsWith(url)).length;
+        },
     }
 }
 

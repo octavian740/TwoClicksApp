@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\TestWhEvent;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,5 +31,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-require __DIR__.'/rooms.php';
+Route::get('/pusher-test', function () {
+    return Inertia::render('PusherTest');
+});
+
+Route::get('/send-webhook', function () {
+    try {
+        event(new TestWhEvent("Test din Laravel 9.0"));
+    } catch (Exception $e) {
+        return $e->getMessage();
+    }
+}); 
+
+require __DIR__ . '/auth.php';
+require __DIR__ . '/rooms.php';

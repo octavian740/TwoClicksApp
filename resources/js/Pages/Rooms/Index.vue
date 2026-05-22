@@ -2,13 +2,17 @@
 
     <Head title="Rooms"></Head>
     <div class="container mx-auto px-4">
+        <div class="py-5">
+            <h1 class="text-5xl font-black text-gray-800">Available Rooms</h1>
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
             <div v-for="room in rooms" :key="room.id"
                 class="bg-white border border-neutral-200 rounded-xl p-5 flex flex-col gap-3 hover:border-neutral-300 transition-colors">
                 <div class="flex items-start justify-between gap-2">
-                    <h3 class="text-[15px] font-medium text-neutral-900 leading-snug">
-                        {{ room.title }}
-                    </h3>
+                    <Link :href="`/rooms/${room.id}`"
+                        class="text-[15px] font-medium text-neutral-900 leading-snug hover:underline hover:text-blue-500 transition-all">
+                    {{ room.title }}
+                    </Link>
                     <span :class="room.status
                         ? 'bg-green-50 text-green-700'
                         : 'bg-red-50 text-red-700'"
@@ -45,12 +49,12 @@
 </template>
 <script>
 import Layout from "@/Layouts/Layout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 
 export default {
 
     components: {
-        Head
+        Head, Link
     },
 
     props: {
