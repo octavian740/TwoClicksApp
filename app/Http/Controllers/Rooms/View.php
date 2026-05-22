@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Rooms;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class View extends Controller
@@ -13,7 +15,8 @@ class View extends Controller
         $room->load('createdBy');
 
         return Inertia::render('Rooms/View', [
-            'room' => $room
+            'room' => $room,
+            'users' => User::whereNot('id', Auth::user()->id)->get()
         ]);
     }
 }
