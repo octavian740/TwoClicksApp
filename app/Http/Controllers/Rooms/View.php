@@ -12,7 +12,7 @@ class View extends Controller
 {
     public function __invoke(Room $room)
     {
-        $room->load('createdBy');
+        $room->load(['createdBy', 'roomInvitations']);
 
         return Inertia::render('Rooms/View', [
             'room' => $room,

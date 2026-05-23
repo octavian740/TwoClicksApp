@@ -2,19 +2,18 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Classes\HashGenerator;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TestWhEvent implements ShouldBroadcast
+class ReceiveInvitationsEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $message;
 
     /**
      * Create a new event instance.
@@ -22,9 +21,14 @@ class TestWhEvent implements ShouldBroadcast
      * @return void
      */
 
-    public function __construct($message)
+    public $user;
+    public $room;
+
+    public function __construct($user, $room)
     {
-        $this->message = $message;
+        $hashids = new HashGenerator();
+        $this->user = User::find($hashids->decode($user))->first();
+        $this->room = Room::find($hashids->decode($room))->load('createdBy')->first();
     }
 
     /**
@@ -34,11 +38,16 @@ class TestWhEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('my-channel');
+        return new PrivateChannel("receive-invitations.{$this->user->id}");
     }
 
     public function broadcastAs()
     {
-        return 'test-wh-event';
+        return 'receive-invitations-event';
     }
+
+    // public function broadcastWith()
+    // {
+    //     return [$this->user, $this->room];
+    // }
 }

@@ -47,13 +47,9 @@ export default {
         },
 
         listenToWh() {
-            // Spunem mai întâi că ascultăm pe un canal PUBLIC numit 'my-channel'
             window.Echo.channel('my-channel')
                 .listen('.test-wh-event', (e) => {
                     console.log("S-a primit cu succes:", e);
-
-                    // Un mic bonus: în template încerci să afișezi {{ e }}, 
-                    // dar variabila din data() se numește 'messages'
                     this.messages.push(e.message);
                 });
         }

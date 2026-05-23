@@ -15,4 +15,9 @@ class Room extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
+
+    public function roomInvitations()
+    {
+        return $this->hasMany(RoomInvitation::class, 'room_id', 'id');
+    }
 }

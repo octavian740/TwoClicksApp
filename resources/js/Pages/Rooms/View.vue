@@ -41,19 +41,22 @@
             <div>
                 <div class="flex items-center gap-3 px-4 py-2.5 bg-white border border-gray-200 rounded-xl shadow-sm">
                     <div class="flex">
-                        <div v-for="(user, i) in onlineUsers" :key="i"
+                        <div v-for="(user, i) in joinedUsersComputed" :key="i"
                             class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white -mr-2"
                             :style="{ backgroundColor: user.bgColor, color: user.textColor }" :title="user.name">
                             {{ user.initials }}
                         </div>
                     </div>
-                    <span class="text-sm text-gray-500 pl-2">{{ onlineUsers.length }} online</span>
+                    <span class="text-sm text-gray-500 pl-2">{{ joinedUsersComputed.length }} online</span>
                     <span class="w-2 h-2 rounded-full bg-emerald-500 ml-1" />
                 </div>
                 <div>
-                    <button @click="inviteModal = !inviteModal"
-                        class="bg-indigo-500 hover:bg-indigo-400 text-white font-medium text-lg w-full py-1.5 rounded-lg mt-2.5">+
-                        Invite aboard</button>
+                    <button v-if="$page.props.auth.user.id == room.created_by.id && room.status" :disabled="isRoomFull"
+                        @click="inviteModal = !inviteModal" :class="isRoomFull
+                            ? 'bg-gray-300 cursor-not-allowed'
+                            : 'bg-indigo-500 hover:bg-indigo-400'"
+                        class="text-white font-medium text-lg w-full py-1.5 rounded-lg mt-2.5 transition">
+                        {{ isRoomFull ? 'Room full' : '+ Invite aboard' }}</button>
                 </div>
             </div>
         </div>
@@ -163,8 +166,27 @@
                                     </div>
                                 </div>
 
-                                <button @click="sendInternalInvite(user.id)"
-                                    class="px-4 h-9 rounded-xl bg-gray-900 text-white text-xs font-medium hover:bg-black active:scale-95 transition">
+                                <button v-if="isRoomFull" disabled
+                                    class="px-4 h-9 rounded-xl bg-red-100 text-red-600 text-xs font-semibold cursor-not-allowed">
+                                    Room full
+                                </button>
+
+                                <button
+                                    v-else-if="room.room_invitations.some(el => el.inviting_id == user.id && el.accepted == true)"
+                                    disabled
+                                    class="px-4 h-9 rounded-xl bg-gray-400 text-white text-xs font-semibold cursor-not-allowed transition-all duration-200">
+                                    Already a member!
+                                </button>
+
+                                <button
+                                    v-else-if="sendList.includes(user.id) || room.room_invitations.some(el => el.inviting_id == user.id && el.accepted == false)"
+                                    disabled
+                                    class="flex items-center gap-1.5 px-4 h-9 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200/60 cursor-not-allowed transition-all duration-200">
+                                    Invited
+                                </button>
+
+                                <button v-else @click="sendInternalInvite(user.id)"
+                                    class="px-4 h-9 rounded-xl bg-gray-950 text-white text-xs font-semibold hover:bg-black active:scale-95 transition-all duration-200">
                                     Invite
                                 </button>
                             </div>
@@ -175,7 +197,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <div class="flex items-center justify-between mb-3">
                         <label class="text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -289,7 +310,6 @@
             </div>
         </div>
     </Modal>
-
 </template>
 
 <script>
@@ -319,14 +339,11 @@ export default {
             cursorY: 0,
             currentColor: '#7C3AED',
             cursorSpeed: 0.15,
-            onlineUsers: [
-                { initials: 'OC', name: 'Octav C.', bgColor: '#EDE9FE', textColor: '#5B21B6' },
-                { initials: 'AL', name: 'Alex L.', bgColor: '#D1FAE5', textColor: '#065F46' },
-                { initials: 'MR', name: 'Maria R.', bgColor: '#FEE2E2', textColor: '#991B1B' },
-            ],
+            joinedUsers: [],
             inviteModal: false,
             copied: false,
             searchQuery: '',
+            sendList: []
         };
     },
 
@@ -347,7 +364,33 @@ export default {
                 user.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                 user.email.toLowerCase().includes(this.searchQuery.toLowerCase())
             )
-        }
+        },
+        joinedUsersComputed() {
+            const users = []
+
+            if (this.room.created_by) {
+                users.push(this.room.created_by)
+            }
+
+            this.room.room_invitations.forEach(invite => {
+                if (invite.accepted) {
+                    const foundUser = this.users.find(u => u.id === invite.inviting_id)
+
+                    if (foundUser) {
+                        users.push(foundUser)
+                    }
+                }
+            })
+
+            return users.map(user => ({
+                ...user,
+                initials: this.getInitials(user.name),
+                bgColor: this.generateUserColor(user.name)
+            }))
+        },
+        isRoomFull() {
+            return this.joinedUsersComputed.length >= this.room.max_clients
+        },
     },
 
     methods: {
@@ -447,6 +490,70 @@ export default {
 
             window.open(shareUrl, '_blank', 'width=700,height=700')
         },
+
+        sendInternalInvite(id) {     //           ROOM                       THE RECEIVER
+            axios.get(`/rooms/invite/internal/${this.generateHash(this.room.id)}/${this.generateHash(id)}`)
+                .then((response) => {
+                    const sent = response.data.status;
+                    if (sent) {
+                        this.sendList.push(id);
+                    }
+                })
+                .catch((errors) => {
+                    console.error(errors);
+                });
+        },
+
+        getInitials(name) {
+            return name
+                .split(' ')
+                .map(word => word.charAt(0))
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
+        },
+
+        generateUserColor(name) {
+            let hash = 0
+
+            for (let i = 0; i < name.length; i++) {
+                hash = name.charCodeAt(i) + ((hash << 5) - hash)
+            }
+
+            const hue = hash % 360
+
+            return `hsl(${hue}, 70%, 50%)`
+        },
+
+        sendInternalInvite(id) {
+
+            if (this.isRoomFull) {
+                alert('This room is already full 😭')
+                return
+            }
+
+            axios.get(`/rooms/invite/internal/${this.generateHash(this.room.id)}/${this.generateHash(id)}`)
+                .then((response) => {
+
+                    const sent = response.data.status;
+
+                    if (sent) {
+                        this.sendList.push(id);
+                    }
+
+                })
+                .catch((errors) => {
+
+                    if (errors.response?.status === 403) {
+                        alert('This room is already full 😭')
+                        return
+                    }
+
+                    console.error(errors);
+
+                });
+
+        }
 
     }
 }

@@ -42,6 +42,21 @@
                         </svg>
                         <span class="text-xs font-medium text-neutral-600">{{ room.max_clients }}</span>
                     </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl font-bold">{{ room.name }}</h1>
+
+                            <span v-if="room.created_by.id === $page.props.auth.user.id"
+                                class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-650/20">
+                                Owner
+                            </span>
+
+                            <span v-else
+                                class="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">
+                                Invited
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
